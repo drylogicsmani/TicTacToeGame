@@ -1,10 +1,9 @@
 class Position
 
-  def place(row, column)
+  def position(row, column)
     @x = row
     @y = column
+    {x: @x, y: @y}
   end
-
-  attr_accessor :x, :y
-
+  
 end

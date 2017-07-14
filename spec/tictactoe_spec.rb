@@ -1,50 +1,50 @@
 require_relative '../lib/tictactoe.rb'
 
-describe "TicTacToeGame" do
+describe 'TicTacToe' do
 
-  let(:position) {Position.new}
-  let(:p0x0) { position.place(0,0)}
-  let(:p0x1) { position.place(0,1)}
-
-  it "should allow only two tokens" do
-    TicTacToe.new('X', 'O', 3)
+  let(:game) {TicTacToe.new(:X, :O)}
+  let(:place) {Position.new()}
+  let(:p0x0) {place.position(0,0)}
+  let(:p0x1) {place.position(0,1)}
+  let(:p0x2) {place.position(0,2)}
+  let(:p1x0) {place.position(1,0)}
+  let(:p1x1) {place.position(1,1)}
+  let(:p1x2) {place.position(1,2)}
+  let(:p2x0) {place.position(2,0)}
+  let(:p2x1) {place.position(2,1)}
+  let(:p2x2) {place.position(2,2)}
+ 
+  it 'should assign tokens to players' do
+    game = TicTacToe.new(:X, :O)
+    expect(game.first_player).to be(:X)
+    expect(game.second_player).to be(:O)
   end
 
-  it "should both tokens are not same" do
-    expect{ TicTacToe.new('X', 'O', 3) }.to raise("both token are not same")
+  it 'should not allow tokens to be same' do
+    expect {game = TicTacToe.new(:X, :X)}.to raise_error("Tokens cannot be the same.")
   end
 
-  it "should both tokens are same" do
-    expect{ TicTacToe.new('O', 'O', 3) }.to raise("both token are same")
+  it 'should allow placing a token in a cell' do
+    game.place('X', p0x0)
+    expect(game.board[p0x0[:x]][p0x0[:y]]).to eq('X')
   end
 
-  it "should place tokens alternatively" do
-    expect{ }
-  end
-
-  it "should not place tokens for different places" do
-  end
-
-  context "Wining Condition" do
-
-    it 'should same token are placed in horizontally' do
-    end
-
-    it 'should same token are placed in vertically' do
-    end
-
-    it 'should same token are placed in diagonally' do
-    end
+  it 'should not allow placing token in a occupied cell' do
 
   end
 
-  context "Draw Condition" do
+  it 'should alternate between players'
+  it 'should not allow a player to play twice'
+  it 'should not allow player 2 to play first'
 
-    it 'should token placed in all the cells' do
-    end
-
-    it 'should not satisfied wining condition' do
-    end
-    
+  context 'Win Scenarios' do
+    it 'should declare winner when 3 of his tokens are placed horizontally'
+    it 'should declare winner when 3 of his tokens are placed vertically'
+    it 'should declare winner when 3 of his tokens are placed diagonally'
   end
+
+  context 'Draw Scenario' do
+    it 'should declare draw when there are no free cells and there is no winner'
+  end
+
 end
