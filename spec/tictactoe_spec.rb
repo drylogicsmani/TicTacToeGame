@@ -3,6 +3,7 @@ require_relative '../lib/tictactoe.rb'
 describe 'TicTacToe' do
 
   let(:game) {TicTacToe.new(:X, :O)}
+  let(:game_reverse) {TicTacToe.new(:O, :X)}
   let(:place) {Position.new()}
   let(:p0x0) {place.position(0,0)}
   let(:p0x1) {place.position(0,1)}
@@ -30,15 +31,69 @@ describe 'TicTacToe' do
   end
 
   it 'should not allow placing token in a occupied cell' do
+    game.place('O', p0x1)
+    game.place('X', p0x2)
+    game.place('O', p1x0)
+    game.place('X', p2x1)
+    game.place('O', p1x2)
+    game.place('X', p2x0)
+    if game.token == game.previous_token
+      expect(game.token == game.previous_token).to raise_error("This cell is already occupied")
+    end
+  end
+
+  it 'should alternate between players' do 
+    game.place('X', p0x0)
+    game.place('O', p0x1)
+    game.place('X', p0x2) 
+    game.place('O', p1x0)
+    game.place('X', p1x1)
+    game.place('O', p1x2)
+    game.place('X', p2x0)
+    game.place('O', p2x1)
+    game.place('X', p2x2)
+    if game.token == game.previous_token
+      expect(game.token == game.previous_token).to raise_error("same token repeated")
+    end
 
   end
 
-  it 'should alternate between players'
-  it 'should not allow a player to play twice'
-  it 'should not allow player 2 to play first'
+  it 'should not allow a player to play twice' do
+    token = game.place('X', p0x2)
+    previous_token = game.place('O', p0x1)
+    if token == previous_token
+      expect(token == previous_token).to raise_error("same token repeated")
+    end
+  end
+
+  it 'should not allow player 2 to play first' do
+    if game.first_player == :X
+      expect(game.is_empty?).to eq(false)
+      expect(game.first_player).to eq(:X)
+      expect(game.second_player).not_to eq(:X)
+      game.place('X', p2x2)
+      expect(game.board[p2x2[:x]][p2x2[:y]]).to eq('X')
+      expect(game.board[p2x2[:x]][p2x2[:y]]).not_to eq('O')
+    else
+      expect(game_reverse.is_empty?).to eq(false)
+      expect(game_reverse.first_player).to eq(:O)
+      expect(game_reverse.second_player).not_to eq(:O)
+      game.place('O', p2x2)
+      expect(game.board[p2x2[:x]][p2x2[:y]]).to eq('O')
+      expect(game.board[p2x2[:x]][p2x2[:y]]).not_to eq('X')
+    end
+  end
 
   context 'Win Scenarios' do
-    it 'should declare winner when 3 of his tokens are placed horizontally'
+    it 'should declare winner when 3 of his tokens are placed horizontally' do
+      game.place('X', p0x0)
+      game.place('O', p1x1)
+      game.place('X', p0x2)
+      game.place('O', p2x1)
+      game.place('X', p0x1)
+      game.horizontal_order_winning
+
+    end
     it 'should declare winner when 3 of his tokens are placed vertically'
     it 'should declare winner when 3 of his tokens are placed diagonally'
   end
